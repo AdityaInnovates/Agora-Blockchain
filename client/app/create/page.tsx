@@ -22,6 +22,7 @@ const CreatePage: React.FC = () => {
   const { writeContractAsync } = useWriteContract();
   const [startTime, setStartTime] = useState<Date | null>(new Date());
   const [endTime, setEndTime] = useState<Date | null>(new Date());
+  const [currentImage, setcurrentImage] = useState<File | null>(null);
 
   const changeChain = () => {
     switchChain({ chainId: sepolia.id });
@@ -87,16 +88,51 @@ const CreatePage: React.FC = () => {
           Create New Election
         </h2>
         <form onSubmit={createElection} className="space-y-6">
-          <InputField
-            name="name"
-            label="Election Name"
-            placeholder="Enter election name"
-          />
-          <TextareaField
-            name="description"
-            label="Description"
-            placeholder="Describe the election"
-          />
+          <div className="flex gap-[1rem] flex-wrap w-full">
+            <input
+              type="file"
+              name="img"
+              id="img"
+              className="hidden"
+              onChange={(el) => {
+                if (el.currentTarget.files) {
+                  setcurrentImage(el.currentTarget.files[0]);
+                }
+              }}
+            />
+            <button
+              type="button"
+              onClick={(el) => {
+                if (el.currentTarget.previousElementSibling) {
+                  (
+                    el.currentTarget.previousElementSibling as HTMLElement
+                  ).click();
+                }
+              }}
+              className="w-[100%] md:w-[12.5rem] h-[12.5rem] /border-dotted border-gray-200 border-[1px] rounded-md grid place-items-center hover:bg-slate-100 transition-all duration-300 cursor-pointer"
+            >
+              <div className="flex flex-col items-center ">
+                <img
+                  src="/assets/images/UploadImageLogo.png"
+                  className="w-[2rem] object-contain"
+                  alt=""
+                />
+                <h3 className="text-sm text-gray-400">Upload Image</h3>
+              </div>
+            </button>
+            <div className="space-y-4 md:w-[64%] w-[100%]">
+              <InputField
+                name="name"
+                label="Election Name"
+                placeholder="Enter election name"
+              />
+              <TextareaField
+                name="description"
+                label="Description"
+                placeholder="Describe the election"
+              />
+            </div>
+          </div>
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
               Voting Type
